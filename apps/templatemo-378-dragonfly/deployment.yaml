@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: templatemo-378-dragonfly-deployment
+  labels:
+    app: templatemo-378-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: templatemo-378-app
+  template:
+    metadata:
+      labels:
+        app: templatemo-378-app
+    spec:
+      containers:
+        - name: templatemo-378
+          image: "stephenesu/templatemo_378_dragonfly:latest"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "256Mi"
+            limits:
+              cpu: "250m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: data-storage
+              mountPath: /mnt/data
+      volumes:
+        - name: data-storage
+          persistentVolumeClaim:
